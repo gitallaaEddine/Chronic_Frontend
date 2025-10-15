@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Performance Optimizations -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+
+    <link rel="modulepreload" href="/src/main.jsx" />
+
+    <!-- SEO Meta Tags -->
+    <title>
+      Cretti - Affordable Web Design for Startups & Small Businesses
+    </title>
+    <meta
+      name="description"
+      content="Launch your startup or grow your small business with Cretti's affordable web design campaign. Professional websites that convert visitors into customers." />
+    <meta
+      name="keywords"
+      content="startup web design, small business websites, affordable web design, business website design, startup digital presence, web development for startups" />
+    <meta name="author" content="Cretti" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://cretti.com" />
+
+    <!-- Open Graph (Facebook) -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Cretti - Affordable Web Design for Startups & Small Businesses" />
+    <meta
+      property="og:description"
+      content="Launch your startup or grow your small business with professional web design that converts visitors into customers." />
+    <meta
+      property="og:image"
+      content="https://cretti.com/images/cretti-home-og.jpg" />
+    <meta property="og:url" content="https://cretti.com" />
+    <meta property="og:site_name" content="Cretti" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Cretti - Affordable Web Design for Startups & Small Businesses" />
+    <meta
+      name="twitter:description"
+      content="Professional web design that helps startups and small businesses convert visitors into customers." />
+    <meta
+      name="twitter:image"
+      content="https://cretti.com/images/cretti-home-twitter.jpg" />
+
+    <!-- Additional SEO -->
+    <meta name="theme-color" content="#030712" />
+    <meta name="msapplication-TileColor" content="#030712" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+    <link rel="stylesheet" href="/src/styles/index.css" />
+
+    <!-- Critical CSS inline for above-the-fold content -->
+    <style>
+      .critical-loading {
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #fff;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #000;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Ultra-light static loader -->
+    <div id="global-loader">
+      <style>
+        #global-loader {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          background: #111;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          z-index: 9999;
+          flex-direction: column;
+          font-family: sans-serif;
+          color: white;
+        }
+        .loader-bar {
+          width: 120px;
+          height: 4px;
+          background: rgba(255, 255, 255, 0.1);
+          overflow: hidden;
+          border-radius: 2px;
+          margin-top: 10px;
+          position: relative;
+        }
+        .loader-bar::before {
+          content: "";
+          position: absolute;
+          height: 100%;
+          width: 40px;
+          background: #00ff99;
+          animation: snake 1.2s linear infinite;
+        }
+        @keyframes snake {
+          0% {
+            left: -40px;
+          }
+          100% {
+            left: 120px;
+          }
+        }
+      </style>
+
+      <div>Loading Website...</div>
+      <div class="loader-bar"></div>
+    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <button></button>
+  </body>
+</html>

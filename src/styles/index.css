@@ -1,0 +1,170 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+
+/* Critical CSS - Above the fold styles */
+.critical-above-fold {
+  font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+}
+
+/* Preload critical fonts */
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local("DM Sans"), local("DMSans-Regular");
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: inherit;
+  scroll-behavior: smooth;
+  font-family: "DM Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+@theme {
+  /*Background color*/
+  --color-sidebar_bg: #111827;
+
+  /* blue */
+  --color-primary: #138aec;
+  /* black */
+  --color-secondary: #101a22;
+  /* white */
+  --color-trinary: #f6f8f6;
+
+  /* Text color */
+
+  /* white text */
+  --color-text: #ffffff;
+
+  /* that black bg color */
+  --color-footer: #1c1c1a;
+  --color-gradient-light: #2a2a28;
+
+  /*Text color*/
+
+  --color-text_one: #5f5f5f;
+  /* that grey in footer text */
+
+  --color-text_three: #8d8f91;
+  /*  grey in header  */
+
+  /* fade in animation top to bottom */
+  --animate-fade-up-1: fadeUp 0.5s ease-out forwards;
+  --animate-fade-up-2: fadeUp 1s ease-out forwards;
+
+  @keyframes fadeUp {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+
+    50% {
+      opacity: 0.4;
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* fade in animation left to right */
+  --animate-fade-right-1: fadeRight 2s ease forwards;
+
+  @keyframes fadeRight {
+    0% {
+      opacity: 0;
+      transform: translateX(-100px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+.flex-center {
+  @apply flex justify-center items-center;
+}
+
+.Focus {
+  @apply focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2;
+}
+
+.heading-xl {
+  @apply text-4xl lg:text-6xl font-extrabold leading-tight;
+}
+
+.Links {
+  @apply bg-primary text-text inline-flex items-center justify-center gap-2 max-sm:text-[15px] px-3 py-2 max-sm:px-2 rounded-lg cursor-pointer hover:bg-primary/70 transition-colors;
+}
+
+.lightLinks {
+  @apply bg-trinary text-primary hover:bg-secondary/10 hover:text-[#0774ce] border-2 border-primary inline-flex items-center justify-center gap-2 max-sm:text-[15px] px-3 py-2 max-sm:px-2 rounded-lg cursor-pointer transition-colors;
+}
+
+.hover-lift {
+  @apply transition-all duration-300 ease-out;
+}
+
+.hover-lift:hover {
+  @apply -translate-y-2 shadow-2xl;
+}
+
+.hover-glow {
+  @apply transition-all duration-300;
+}
+
+.hover-glow:hover {
+  @apply shadow-lg shadow-blue-500/25;
+}
+
+.glass {
+  @apply bg-white/10 backdrop-blur-md border border-white/20;
+}
+
+/* Details Drop down */
+
+.smooth-details {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+.smooth-details[open] {
+  animation: slideDown 0.5s ease-in-out;
+}
+
+.smooth-details summary {
+  @apply transition-transform duration-200;
+}
+
+.smooth-details[open] summary {
+  @apply mb-4;
+}
+
+@keyframes slideDown {
+  0% {
+    max-height: 100px;
+  }
+
+  100% {
+    max-height: 200px;
+  }
+}
+
+/* gradient background */
+.bg-gradient-dark {
+  @apply hover:bg-gradient-to-b hover:from-gradient-light hover:via-footer hover:via-20% hover:to-footer hover:border-text_one/20 hover:border-[0.5px] hover:rounded-lg border-b-[0.5px] border-text_three/20;
+}
+
+.bg-gradient-Light {
+  @apply px-4 py-3 hover:bg-gradient-to-b hover:from-gray-50 hover:via-gray-100 hover:via-20% hover:to-secondary/15 hover:border-secondary/30 hover:border-[0.5px] hover:rounded-lg;
+}
