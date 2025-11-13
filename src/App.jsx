@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect, Suspense, lazy } from "react";
 import { PageSkeleton } from "./components/ui/LoadingSkeleton";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import GoToTopButton from "./components/ui/GoToTop";
+import ProtectedLayout  from "./components/ProtectedLayout";
 
 // 🧩 lazy-loaded pages
 const Home = lazy(() => import("./pages/Home"));
@@ -40,114 +43,125 @@ function RouteBoundary({ children }) {
   );
 }
 
+const queryClient = new QueryClient();
+
 export default function App() {
   return (
     // Global fallback boundary for catastrophic errors
-    <ErrorBoundary>
-      <BrowserRouter
-        future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
-      >
-        <ScrollToTop />
+    <QueryClientProvider client={queryClient}>
+      <ErrorBoundary>
+        <BrowserRouter
+          future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+        >
+          <ScrollToTop />
 
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <RouteBoundary>
-                <Home />
-              </RouteBoundary>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <RouteBoundary>
-                <Profile />
-              </RouteBoundary>
-            }
-          />
-          <Route
-            path="/about"
-            element={
-              <RouteBoundary>
-                <About />
-              </RouteBoundary>
-            }
-          />
-          <Route
-            path="/contact"
-            element={
-              <RouteBoundary>
-                <Contact />
-              </RouteBoundary>
-            }
-          />
-          <Route
-            path="/startCampaign"
-            element={
-              <RouteBoundary>
-                <StartCampaign />
-              </RouteBoundary>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <RouteBoundary>
-                <Login />
-              </RouteBoundary>
-            }
-          />
-          <Route
-            path="/register"
-            element={
-              <RouteBoundary>
-                <Register />
-              </RouteBoundary>
-            }
-          />
-          <Route
-            path="/forgotPassword"
-            element={
-              <RouteBoundary>
-                <ForgotPassword />
-              </RouteBoundary>
-            }
-          />
-          <Route
-            path="/campaigns"
-            element={
-              <RouteBoundary>
-                <Campaigns />
-              </RouteBoundary>
-            }
-          />
-          <Route
-            path="/campaign-detail/:slug"
-            element={
-              <RouteBoundary>
-                <CampaignDetail />
-              </RouteBoundary>
-            }
-          />
-          <Route
-            path="/donate/:slug"
-            element={
-              <RouteBoundary>
-                <DonatePage />
-              </RouteBoundary>
-            }
-          />
-          <Route
-            path="*"
-            element={
-              <RouteBoundary>
-                <NotFound />
-              </RouteBoundary>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
-    </ErrorBoundary>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <RouteBoundary>
+                  <Home />
+                </RouteBoundary>
+              }
+            />
+
+            <Route
+              path="/about"
+              element={
+                <RouteBoundary>
+                  <About />
+                </RouteBoundary>
+              }
+            />
+            <Route
+              path="/contact"
+              element={
+                <RouteBoundary>
+                  <Contact />
+                </RouteBoundary>
+              }
+            />
+
+            <Route
+              path="/login"
+              element={
+                <RouteBoundary>
+                  <Login />
+                </RouteBoundary>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <RouteBoundary>
+                  <Register />
+                </RouteBoundary>
+              }
+            />
+            <Route
+              path="/forgotPassword"
+              element={
+                <RouteBoundary>
+                  <ForgotPassword />
+                </RouteBoundary>
+              }
+            />
+            <Route
+              path="/campaigns"
+              element={
+                <RouteBoundary>
+                  <Campaigns />
+                </RouteBoundary>
+              }
+            />
+            <Route
+              path="/campaign-detail/:id"
+              element={
+                <RouteBoundary>
+                  <CampaignDetail />
+                </RouteBoundary>
+              }
+            />
+            <Route
+              path="/donate/:slug"
+              element={
+                <RouteBoundary>
+                  <DonatePage />
+                </RouteBoundary>
+              }
+            />
+            <Route
+              path="*"
+              element={
+                <RouteBoundary>
+                  <NotFound />
+                </RouteBoundary>
+              }
+            />
+            {/* Protected routes */}
+            <Route element={<ProtectedLayout />}>
+              <Route
+                path="/profile"
+                element={
+                  <RouteBoundary>
+                    <Profile />
+                  </RouteBoundary>
+                }
+              />
+              <Route
+                path="/startCampaign"
+                element={
+                  <RouteBoundary>
+                    <StartCampaign />
+                  </RouteBoundary>
+                }
+              />
+            </Route>
+          </Routes>
+
+          <GoToTopButton />
+        </BrowserRouter>
+      </ErrorBoundary>
+    </QueryClientProvider>
   );
 }

@@ -16,12 +16,19 @@
     "optimize": "npm run lint && npm run build:prod && npm run analyze"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "@tailwindcss/vite": "^4.1.11",
+    "@tanstack/react-query": "^5.90.5",
+    "axios": "^1.13.1",
     "dotenv": "^17.2.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-helmet-async": "^2.0.5",
-    "react-router-dom": "^6.28.0"
+    "react-hook-form": "^7.66.0",
+    "react-router-dom": "^6.28.0",
+    "react-share": "^5.2.2",
+    "zod": "^4.1.12",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",

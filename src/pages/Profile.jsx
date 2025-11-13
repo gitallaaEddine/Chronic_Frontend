@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import Navbar from "../components/Navbar";
 import LazySection from "../components/ui/LazySection";
+import { useAuthStore } from "../store/authStore";
 import { removeLoader } from "../Loader/RemoveLoader";
 import { lazy, Suspense, useEffect, memo } from "react";
 
@@ -16,6 +17,10 @@ const SectionSkeleton = () => (
 );
 
 function Profile() {
+  const userInfo = useAuthStore((state) => state.user);
+  console.log(userInfo);
+  
+
   useEffect(() => {
     removeLoader();
   }, []);
@@ -37,7 +42,7 @@ function Profile() {
             <div className="lg:col-span-1">
               <LazySection fallback={<SectionSkeleton />}>
                 <Suspense fallback={<SectionSkeleton />}>
-                  <ProfileInfo />
+                  <ProfileInfo data={userInfo} />
                 </Suspense>
               </LazySection>
             </div>
@@ -45,7 +50,7 @@ function Profile() {
             <div className="lg:col-span-2 space-y-8">
               <LazySection fallback={<SectionSkeleton />}>
                 <Suspense fallback={<SectionSkeleton />}>
-                  <MyCampaigns />
+                  <MyCampaigns userCampaigns={userInfo.campaigns} />
                 </Suspense>
               </LazySection>
 

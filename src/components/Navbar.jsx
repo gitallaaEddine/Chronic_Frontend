@@ -1,12 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, memo, useCallback } from "react";
 import Container from "../components/container";
 import { useOptimizedCallback } from "../hooks/useOptimizedCallback";
+import { useAuthStore } from "../store/authStore";
+import { authService } from "../services/authServices";
 
 // Static data moved outside component to prevent recreation
 const links = [
   { name: "Home", link: "/" },
-  { name: "Donate", link: "/campaigns" },
+  { name: "campaigns", link: "/campaigns" },
   { name: "About", link: "/about" },
   { name: "Contact", link: "/contact" },
 ];
@@ -14,7 +16,7 @@ const links = [
 // Sidebar navigation links with descriptions
 const sidebarLinks = [
   {
-    name: "Donate",
+    name: "campaigns",
     link: "/campaigns",
     description: "Support causes that matter to you",
   },
@@ -31,9 +33,23 @@ const sidebarLinks = [
 ];
 
 function Navbar() {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const logout = useAuthStore((state) => state.logout);
+  const navigate = useNavigate();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      logout();
+
+      navigate("/");
+    }
+  };
   const throttledToggle = useOptimizedCallback(
     useCallback((value) => {
       setShowSidebar(value);
@@ -77,13 +93,15 @@ function Navbar() {
             {/* Right Navbar */}
             <div className="flex-center gap-1 sm:gap-4 ">
               {/* Contact btn */}
-              <Link
-                to="/login"
-                className="!hidden Links lg:!block "
-                aria-label="Login to your account"
-              >
-                Login
-              </Link>
+              {!isAuthenticated && (
+                <Link
+                  to="/login"
+                  className="!hidden Links lg:!block "
+                  aria-label="Login to your account"
+                >
+                  Login
+                </Link>
+              )}
               <Link
                 to="/StartCampaign"
                 className="!hidden Links lg:!block "
@@ -93,64 +111,67 @@ function Navbar() {
               </Link>
 
               {/* Profile Dropdown */}
-              <div className=" md:relative ">
-                <button
-                  type="button"
-                  onClick={toggleProfileDropdown}
-                  className="overflow-hidden rounded-full border mt-1  shadow-inner"
-                  aria-label="Toggle user menu"
-                >
-                  <span className="sr-only">Toggle dashboard menu</span>
-                  <img
-                    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    alt="User profile"
-                    className="size-10 object-cover"
-                  />
-                </button>
-
-                {showProfileDropdown && (
-                  <div
-                    className="absolute end-0 z-10 mt-0.5 w-56 divide-y divide-secondary rounded-md border  bg-white shadow-lg"
-                    role="menu"
+              {isAuthenticated && (
+                <div className=" md:relative ">
+                  <button
+                    type="button"
+                    onClick={toggleProfileDropdown}
+                    className="overflow-hidden rounded-full border mt-1  shadow-inner"
+                    aria-label="Toggle user menu"
                   >
-                    <div className="p-2">
-                      <Link
-                        to="/profile"
-                        className="block rounded-lg px-4 py-2 text-sm text-secondary hover:bg-secondary/5"
-                        role="menuitem"
-                      >
-                        My profile
-                      </Link>
-                    </div>
+                    <span className="sr-only">Toggle dashboard menu</span>
+                    <img
+                      src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                      alt="User profile"
+                      className="size-10 object-cover"
+                    />
+                  </button>
 
-                    <div className="p-2">
-                      <form method="POST" action="#">
-                        <button
-                          type="submit"
-                          className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-sm text-red-700 hover:bg-red-50"
+                  {showProfileDropdown && (
+                    <div
+                      className="absolute end-0 z-10 mt-0.5 w-56 divide-y divide-secondary rounded-md border  bg-white shadow-lg"
+                      role="menu"
+                    >
+                      <div className="p-2">
+                        <Link
+                          to="/profile"
+                          className="block rounded-lg px-4 py-2 text-sm text-secondary hover:bg-secondary/5"
                           role="menuitem"
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth="1.5"
-                            stroke="currentColor"
-                            className="size-4"
+                          My profile
+                        </Link>
+                      </div>
+
+                      <div className="p-2">
+                        <form method="POST" action="#">
+                          <button
+                            onClick={handleLogout}
+                            type="submit"
+                            className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-sm text-red-700 hover:bg-red-50"
+                            role="menuitem"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
-                            />
-                          </svg>
-                          Logout
-                        </button>
-                      </form>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth="1.5"
+                              stroke="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
+                              />
+                            </svg>
+                            Logout
+                          </button>
+                        </form>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
 
               {/* Sidebar toggle - Only visible on small screens */}
               <button
@@ -242,14 +263,16 @@ function Navbar() {
             >
               Start Fundraise
             </Link>
-            <Link
-              to="/login"
-              onClick={() => throttledToggle(false)}
-              className="block w-1/2 Links"
-              aria-label="Login to your account"
-            >
-              Login
-            </Link>
+            {!isAuthenticated && (
+              <Link
+                to="/login"
+                onClick={() => throttledToggle(false)}
+                className="block w-1/2 Links"
+                aria-label="Login to your account"
+              >
+                Login
+              </Link>
+            )}
           </div>
         </div>
       </div>

@@ -1,13 +1,11 @@
-import Campaign_Client  from "../components/Campaigns/Campaign.client";
-import CampaignList  from "../components/Campaigns/CampaignList.server";
+import Campaign_Client from "../components/Campaigns/Campaign.client";
+import CampaignList from "../components/Campaigns/CampaignList";
 import { memo } from "react";
 
 function Campaign() {
   return (
     <>
-      <Campaign_Client>
-        <CampaignList />
-      </Campaign_Client>
+      <Campaign_Client />
     </>
   );
 }

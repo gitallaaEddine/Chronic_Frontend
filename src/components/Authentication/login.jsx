@@ -1,44 +1,53 @@
-import { useState, useCallback, useEffect, memo } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { removeLoader } from "../../Loader/RemoveLoader";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
+import { authService } from "../../services/authServices";
+import { useAuthStore } from "../../store/authStore";
+import { loginSchema } from "../../validation/authSchema";
 
 function LoginPage() {
+  const navigate = useNavigate();
+  const { setAuth } = useAuthStore();
+  const [error, setError] = useState("");
+
   useEffect(() => {
     removeLoader();
   }, []);
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+  // ✅ React Hook Form setup with Zod validation
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(loginSchema),
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleInputChange = useCallback((e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  }, []);
+  // ✅ Form submission handler
+  const onSubmit = async (formData) => {
+    setError("");
 
-  const handleSubmit = useCallback(
-    async (e) => {
-      e.preventDefault();
-      setIsSubmitting(true);
+    try {
+      // Call backend API
+      const { token, user } = await authService.login(formData);
 
-      try {
-        // TODO: Implement login logic
-        console.log("Login attempt:", formData);
-      } catch (error) {
-        console.error("Login error:", error);
-      } finally {
-        setIsSubmitting(false);
-      }
-    },
-    [formData]
-  );
+      // Update Zustand store
+      setAuth(token, user);
+
+      // Navigate to profile
+      navigate("/profile");
+    } catch (err) {
+      // Show error to user
+      setError(
+        err.response?.data?.message ||
+          "Invalid email or password. Please try again."
+      );
+    }
+  };
 
   return (
     <>
@@ -55,31 +64,56 @@ function LoginPage() {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            {/* ✅ API Error message display */}
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-600">{error}</p>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* Email Field */}
               <div>
+                <label htmlFor="email" className="sr-only">
+                  Email address
+                </label>
                 <input
                   id="email"
-                  name="email"
                   type="email"
-                  required
+                  autoComplete="email"
                   placeholder="Email address"
-                  value={formData.email}
-                  onChange={handleInputChange}
+                  {...register("email")}
                   className="w-full px-3 py-3 border border-secondary/30 rounded-lg bg-gray-50 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  aria-invalid={!!errors.email}
                 />
+                {/* ✅ Zod validation error */}
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
 
+              {/* Password Field */}
               <div>
+                <label htmlFor="password" className="sr-only">
+                  Password
+                </label>
                 <input
                   id="password"
-                  name="password"
                   type="password"
-                  required
+                  autoComplete="current-password"
                   placeholder="Password"
-                  value={formData.password}
-                  onChange={handleInputChange}
+                  {...register("password")}
                   className="w-full px-3 py-3 border border-secondary/30 rounded-lg bg-gray-50 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  aria-invalid={!!errors.password}
                 />
+                {/* ✅ Zod validation error */}
+                {errors.password && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
 
               <div className="text-right">
@@ -94,12 +128,13 @@ function LoginPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-blue-500 text-white py-3 rounded-lg font-medium hover:bg-primary focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-blue-500 text-white py-3 rounded-lg font-medium hover:bg-primary focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isSubmitting ? "Logging in..." : "Login"}
               </button>
             </form>
 
+            {/* Social login divider */}
             <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -171,4 +206,4 @@ function LoginPage() {
   );
 }
 
-export default memo(LoginPage);
+export default LoginPage;

@@ -32,7 +32,7 @@ function CampaignCard({ campaign }) {
           state={campaign}
           className="w-full Links"
         >
-          Donate Now
+          see more details
         </Link>
       </div>
     </div>

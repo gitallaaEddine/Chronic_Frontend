@@ -1,21 +1,7 @@
-import { memo, useState, useCallback } from "react";
+import { memo } from "react";
 
-function ProfileInfo() {
-  const [isEditing, setIsEditing] = useState(false);
-  const [profile, setProfile] = useState({
-    name: "Amine K.",
-    email: "amine.k@email.com",
-    phone: "+213 555 123 456",
-  });
-
-  const handleEdit = useCallback(() => {
-    setIsEditing(!isEditing);
-  }, [isEditing]);
-
-  const handleSave = useCallback(() => {
-    setIsEditing(false);
-  }, []);
-
+function ProfileInfo({ data }) {
+  
   return (
     <div className="bg-white rounded-lg shadow p-6 space-y-8">
       <div className="text-center">
@@ -41,65 +27,9 @@ function ProfileInfo() {
             </svg>
           </div>
         </div>
-        <h3 className="text-lg font-bold text-secondary">{profile.name}</h3>
-        <p className="text-sm text-secondary/60">{profile.email}</p>
-        <p className="text-sm text-secondary/60">{profile.phone}</p>
-      </div>
-
-      <div>
-        <h4 className="font-semibold text-secondary mb-4">Impact Stats</h4>
-        <div className="space-y-3">
-          <div className="flex justify-between">
-            <span className="text-secondary/60">Patients Helped</span>
-            <span className="font-semibold text-primary">12</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-secondary/60">Total Donated</span>
-            <span className="font-semibold text-green-600">DA 150,000</span>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h4 className="font-semibold text-secondary mb-4">Badges</h4>
-        <div className="flex justify-center space-x-6">
-          <div className="text-center">
-            <div className="w-12 h-12 bg-secondary/15 rounded-full flex items-center justify-center mb-2">
-              <svg
-                className="w-6 h-6 text-secondary/60"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-            </div>
-            <span className="text-xs text-secondary/60">First Donation</span>
-          </div>
-          <div className="text-center">
-            <div className="w-12 h-12 bg-yellow-200 rounded-full flex items-center justify-center mb-2">
-              <svg
-                className="w-6 h-6 text-yellow-600"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-            </div>
-            <span className="text-xs text-secondary/60">Silver Donor</span>
-          </div>
-          <div className="text-center">
-            <div className="w-12 h-12 bg-secondary/15 rounded-full flex items-center justify-center mb-2">
-              <svg
-                className="w-6 h-6 text-secondary/60"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-            </div>
-            <span className="text-xs text-secondary/60">Gold Donor</span>
-          </div>
-        </div>
+        <h3 className="text-lg font-bold text-secondary">{data.username}</h3>
+        <p className="text-sm text-secondary/60">{data.email}</p>
+        <p className="text-sm text-secondary/60">{data.phone}</p>
       </div>
 
       <div>
